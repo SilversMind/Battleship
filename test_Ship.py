@@ -39,7 +39,7 @@ class test_Board(unittest.TestCase):
 		size_ship_to_place = (4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
 		for x in size_ship_to_place:
 			ship = Ship.Ship(b_test, x)
-			ship.randomly_position_a_ship(b_test)
+			ship.randomly_position_a_ship()
 			# Check if the number of square occupied on the board is equal to the sum of the ships' size
 			# i.e check if all the ships have been placed
 		assert list(b_test.array_occupied.flatten()).count(True) == sum(size_ship_to_place)
