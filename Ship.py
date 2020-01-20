@@ -31,7 +31,7 @@ class Ship:
 			self.position = list()
 			cpt = 0
 			x, y = self.choose_starting_square()
-			while cpt + y < self.board.size and not self.board.array_occupied[x][y + cpt] and cpt < self.size:
+			while cpt + y < self.board.size and self.are_nearby_square_empty(x, y + cpt) and cpt < self.size:
 				self.position.append((x, y + cpt))
 				cpt = cpt + 1
 			if cpt == self.size:
@@ -45,7 +45,7 @@ class Ship:
 			self.position = list()
 			cpt = 0
 			x, y = self.choose_starting_square()
-			while cpt + x < self.board.size and not self.board.array_occupied[x + cpt][y] and cpt < self.size:
+			while cpt + x < self.board.size and self.are_nearby_square_empty(x + cpt, y) and cpt < self.size:
 				self.position.append((x + cpt, y))
 				cpt = cpt + 1
 			if cpt == self.size:
@@ -64,7 +64,21 @@ class Ship:
 			self.disposition_vertically(self.board)
 		self.user_position = [(x[0] + 1, x[1] + 1) for x in self.position]
 
-
+	def are_nearby_square_empty(self, position_x, position_y):
+		# It's necessary to check what square we're going to inspect otherwise it can raise an IndexError
+		square_to_inspect_x, square_to_inspect_y = [0,], [0,]
+		if position_x > 0: square_to_inspect_x.append(-1)
+		if position_y > 0: square_to_inspect_y.append(-1)
+		if position_x < self.board.size - 1: square_to_inspect_x.append(1)
+		if position_y < self.board.size - 1: square_to_inspect_y.append(1)
+		for x_diff in square_to_inspect_x:
+			for y_diff in square_to_inspect_y:
+				try:
+					if self.board.array_occupied[position_x + x_diff][position_y + y_diff]:
+						return False
+				except IndexError as e:
+					print('AN ERROR HAS OCCURED')
+		return True
 
 	def draw_image(self, canvas):
 		img_to_open = size_to_ship[self.size]
