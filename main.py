@@ -26,13 +26,13 @@ def init_interface(size=8, game=None, default_ship_value=None):
     c.config(width=(size + 1) * 60, height=(size + 1) * 60)
     c.grid(row=0, column=1)
 
-    img = PhotoImage(file="battleships_img/escort.png")
+    img = PhotoImage(file="battleships_img/escort.gif")
     img1 = img.subsample(2, 2)
-    img = PhotoImage(file="battleships_img/destroyer.png")
+    img = PhotoImage(file="battleships_img/destroyer.gif")
     img2 = img.subsample(3, 2)
-    img = PhotoImage(file="battleships_img/torpedo.png")
+    img = PhotoImage(file="battleships_img/torpedo.gif")
     img3 = img.subsample(2, 2)
-    img = PhotoImage(file="battleships_img/submarine.png")
+    img = PhotoImage(file="battleships_img/submarine.gif")
     img4 = img.subsample(4, 2)
 
     # Set default value

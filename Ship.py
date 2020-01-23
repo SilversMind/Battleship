@@ -7,10 +7,10 @@ from tkinter import Label, NW
 from PIL import Image, ImageTk
 
 # Affect pictures according to the ship sizes
-size_to_ship = {1: 'battleships_img/submarine.png',
-                2: 'battleships_img/torpedo.png',
-                3: 'battleships_img/destroyer.png',
-                4: 'battleships_img/escort.png'}
+size_to_ship = {1: 'battleships_img/submarine.gif',
+                2: 'battleships_img/torpedo.gif',
+                3: 'battleships_img/destroyer.gif',
+                4: 'battleships_img/escort.gif'}
 
 
 class Ship:
