@@ -3,11 +3,8 @@
 # Author: Samy Sidhoum
 """[application description here]"""
 import random
-import Board
 from tkinter import Label, NW
 from PIL import Image, ImageTk
-import time
-import sys
 
 size_to_ship = {1: 'battleships_img/submarine.png',
                 2: 'battleships_img/torpedo.png',
@@ -52,10 +49,6 @@ class Ship:
 		return False
 
 	def disposition_vertically(self):
-		# t0 = time.time()
-		# if time.time() - t0 > 2000:
-		# 	print('DEAD END REACHED')
-		# 	sys.exit(1)
 
 		self.position = list()
 		cpt = 0

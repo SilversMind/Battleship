@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Samy Sidhoum
-"""[application description here]"""
+"""Main Program"""
 
 from tkinter import Tk
 import Game
@@ -13,7 +13,6 @@ def main():
     b_test = Board.Board(5)
     windows_size = (b_test.size + 1) * 60
     root.geometry("{0}x{0}".format(str(windows_size)))
-    t = str(windows_size) + 'x' + str(windows_size)
     ships_size = (3, 3, 3, 3)
     ships = [Ship.Ship(b_test, x) for x in ships_size]
     game = Game.Game(b_test, ships)

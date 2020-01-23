@@ -1,7 +1,6 @@
 import unittest
 import Ship
 import Board
-import numpy
 
 board_test = Board.Board(8)
 ship_test = Ship.Ship(board_test, 3)

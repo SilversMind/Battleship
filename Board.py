@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Samy Sidhoum
-"""[application description here]"""
+"""Board class - All functions relatives to the occupations of the board squares"""
 import numpy
 from tkinter import Frame, Canvas, BOTH
 

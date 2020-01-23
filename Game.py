@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Samy Sidhoum
-"""[application description here]"""
+"""Game class - Manages all the positionning mechanism"""
 import Ship
 import Board
 import queue
@@ -14,6 +14,7 @@ class Game:
 		self.to_place = queue.LifoQueue(maxsize=len(self.ships))
 		for ship in ships:
 			self.to_place.put(ship)
+
 	def find_ship_location(self, current_ship):
 		# Heuristic function to reduce number of dead end obtained when trying
 		# to place a ship using a naive random positionning algorithm.
