@@ -1,18 +1,18 @@
 import unittest
+import numpy
 import Board
 import Ship
-import numpy
-
-b_test = Board.Board(8)
 
 
 class test_Board(unittest.TestCase):
 
 	def test_size(self):
+		b_test = Board.Board(8)
 		assert b_test.size == 8
 
 	def test_array(self):
 		# Check matrix size and all elements value (supposed to be initialized to False)
+		b_test = Board.Board(8)
 		assert b_test.array_occupied.shape == (8, 8)
 		assert not numpy.any(b_test.array_occupied)
 

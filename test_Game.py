@@ -7,6 +7,7 @@ import Board
 import Ship
 import Game
 
+
 class test_Game(unittest.TestCase):
 
 	def test_find_ship_location(self):
@@ -16,4 +17,4 @@ class test_Game(unittest.TestCase):
 		for i in range(len(ships_size)):
 			ships[i].name = 'B' + str(i + 1)
 		game = Game.Game(b_test, ships)
-		game.main()
+		game.play()

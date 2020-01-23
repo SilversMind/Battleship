@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 # Author: Samy Sidhoum
 """Game class - Manages all the positionning mechanism"""
-import Ship
-import Board
 import queue
 import time
 import sys
+
 
 class Game:
 	def __init__(self, board, ships):
@@ -22,8 +21,6 @@ class Game:
 		# Heuristic function to reduce number of dead end obtained when trying
 		# to place a ship using a naive random positionning algorithm.
 		if self.board.is_positionning_possible(current_ship):
-			# for x in self.placed.queue:
-			# 	print(x.position)
 			current_ship.randomly_position_a_ship()
 			self.placed.put(current_ship)
 		else:
@@ -34,11 +31,10 @@ class Game:
 			previous_ship.remove_ship()
 			self.find_ship_location(previous_ship)
 
-	def main(self):
+	def play(self):
 		while not self.placed.full():
 			if time.time() - self.t0 > 6:
 				print('No solution found before timeout')
 				sys.exit(-1)
 			current_ship = self.to_place.get()
 			self.find_ship_location(current_ship)
-

@@ -17,7 +17,6 @@ class test_Board(unittest.TestCase):
 		assert all([True for x in starting_square if 0 < x < 8])
 
 	def test_randomly_position_a_ship(self):
-		b_test = Board.Board(4)
 		ship_test.randomly_position_a_ship()
 		assert len(ship_test.position) == 3
 		# Check if the board are all along the same column
@@ -28,7 +27,6 @@ class test_Board(unittest.TestCase):
 				       [x[1] for x in ship_test.position] == list(
 			       range(ship_test.position[0][1], ship_test.position[0][1] + ship_test.size)))
 
-
 	def test_remove_ship(self):
 		b_test = Board.Board(8)
 		test_ship = Ship.Ship(b_test, 3)
@@ -38,13 +36,3 @@ class test_Board(unittest.TestCase):
 		assert not test_ship.position
 		assert not test_ship.user_position
 		assert not test_ship.direction
-
-	def test_position_multiple_ships(self):
-		b_test = Board.Board(20)
-		size_ship_to_place = (4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
-		for x in size_ship_to_place:
-			ship = Ship.Ship(b_test, x)
-			ship.randomly_position_a_ship()
-	# Check if the number of square occupied on the board is equal to the sum of the ships' size
-	# i.e check if all the ships have been placed
-	# assert b_test.count_number_of_occupied_square() == sum(size_ship_to_place)

@@ -3,16 +3,16 @@
 # Author: Samy Sidhoum
 """Main Program"""
 
+from tkinter import *
+from tkinter.ttk import *
 import Game
 import Board
 import Ship
-from tkinter import *
-from tkinter.ttk import *
 
 
-def init_interface(size=8, ships_size=None, game=None, default_ship_value = None):
+def init_interface(size=8, game=None, default_ship_value=None):
 
-    def draw_board_and_canvas(size):
+    def draw_board_and_canvas():
         canvas = Canvas()
         for x in range(size):
             for y in range(size):
@@ -22,8 +22,7 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
     # creating main tkinter window/toplevel
     master = Tk()
     master.title('Battleship')
-    # master.geometry("1000x1000")
-    c = draw_board_and_canvas(size)
+    c = draw_board_and_canvas()
     c.config(width=(size + 1) * 60, height=(size + 1) * 60)
     c.grid(row=0, column=1)
 
@@ -51,8 +50,7 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
         v_submarine.set("4")
         v_boardsize.set("8")
 
-
-    # setting image with the help of label
+    # Setting image with the help of label
     Label(master, image=img1).grid(row=1, column=0, padx=5, pady=5)
 
     sb_escort = Spinbox(master, from_=0, to=10, textvariable=v_escort)
@@ -79,8 +77,7 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
     sb_boardsize = Spinbox(master, from_=0, to=10, textvariable=v_boardsize)
     sb_boardsize.grid(row=3, column=2, padx=5, pady=20)
 
-
-    def quit(master):
+    def quit():
         master.destroy()
 
     def scramble_button():
@@ -96,16 +93,15 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
             for x in range(int(number)):
                 ship_list.append(cpt + 1)
         ships_size = list(reversed(ship_list))
-        print(ship_list)
         b_test = Board.Board(size_)
         ships = [Ship.Ship(b_test, x) for x in ships_size]
         game = None
         if size_ > 1 and ships_size:
             game = Game.Game(b_test, ships)
-            game.main()
+            game.play()
 
-        quit(master)
-        init_interface(int(size_), ships_size, game, default_ship_value)
+        quit()
+        init_interface(int(size_), game, default_ship_value)
 
     board_scrambler = Button(master, text='Scramble', command=scramble_button)
     board_scrambler.grid(row=3, column=3)
@@ -119,5 +115,4 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
 
 
 if __name__ == '__main__':
-    # main()
     init_interface()

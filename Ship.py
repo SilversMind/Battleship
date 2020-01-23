@@ -6,6 +6,7 @@ import random
 from tkinter import Label, NW
 from PIL import Image, ImageTk
 
+# Affect pictures according to the ship sizes
 size_to_ship = {1: 'battleships_img/submarine.png',
                 2: 'battleships_img/torpedo.png',
                 3: 'battleships_img/destroyer.png',
@@ -13,6 +14,7 @@ size_to_ship = {1: 'battleships_img/submarine.png',
 
 
 class Ship:
+
 	def __init__(self, board, size=4):
 		self.name = None
 		self.size = size
@@ -32,11 +34,6 @@ class Ship:
 		return x, y
 
 	def disposition_horizontally(self):
-		# t0 = time.time()
-		# if time.time() - t0 > 2000:
-		# 	print('DEAD END REACHED')
-		# 	sys.exit(1)
-
 		self.position = list()
 		cpt = 0
 		x, y = self.choose_starting_square()
@@ -44,12 +41,10 @@ class Ship:
 			self.position.append((x, y + cpt))
 			cpt = cpt + 1
 		if cpt == self.size:
-			ship_placed = True
 			return True
 		return False
 
 	def disposition_vertically(self):
-
 		self.position = list()
 		cpt = 0
 		x, y = self.choose_starting_square()
@@ -63,8 +58,7 @@ class Ship:
 	def randomly_position_a_ship(self):
 		ship_placed = False
 		# Choose randomly a value between 0 and 1 to choose whether to place the boat vertically or horizontally
-		while len(
-				self.position) < self.size and not ship_placed:  # and self.size < self.board.count_number_of_empty_square() - len(self.forbidden_position):
+		while len(self.position) < self.size and not ship_placed:
 			position_number = random.randrange(2)
 			if position_number == 0:
 				self.direction = 'horizontally'
@@ -94,7 +88,9 @@ class Ship:
 			battleship_img = battleship_img.transpose(Image.ROTATE_90)
 			y_value = self.position[-1][1]
 		photo = ImageTk.PhotoImage(battleship_img)
-		canvas.create_image(30 + self.position[0][0] * 60, (60 * self.board.size - 30) - y_value * 60, image=photo,
+		canvas.create_image(30 + self.position[0][0] * 60,
+		                    (60 * self.board.size - 30) - y_value * 60,
+		                    image=photo,
 		                    anchor=NW)
 		label = Label(image=photo)
-		label.image = photo  # keep a reference!
+		label.image = photo
