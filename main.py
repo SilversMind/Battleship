@@ -3,23 +3,27 @@
 # Author: Samy Sidhoum
 """[application description here]"""
 
-from tkinter import Tk, Label
-from PIL import ImageTk, Image
-import Board, Ship
-
+from tkinter import Tk
+import Game
+import Board
+import Ship
 
 def main():
-
     root = Tk()
-    root.geometry("543x540")
-    board = Board.Board(8)
-    size_ship_to_place = (4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
-    for x in size_ship_to_place:
-        ship = Ship.Ship(board, x)
-        ship.randomly_position_a_ship()
-        ship.draw_image(board.canvas)
-        print(ship.user_position)
+    b_test = Board.Board(5)
+    windows_size = (b_test.size + 1) * 60
+    root.geometry("{0}x{0}".format(str(windows_size)))
+    t = str(windows_size) + 'x' + str(windows_size)
+    ships_size = (3, 3, 3, 3)
+    ships = [Ship.Ship(b_test, x) for x in ships_size]
+    game = Game.Game(b_test, ships)
+    game.main()
+    while not game.placed.empty():
+        ship = game.placed.get()
+        ship.draw_image(b_test.canvas)
+
     root.mainloop()
+
 
 if __name__ == '__main__':
     main()

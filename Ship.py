@@ -6,6 +6,8 @@ import random
 import Board
 from tkinter import Label, NW
 from PIL import Image, ImageTk
+import time
+import sys
 
 size_to_ship = {1: 'battleships_img/submarine.png',
                 2: 'battleships_img/torpedo.png',
@@ -15,81 +17,91 @@ size_to_ship = {1: 'battleships_img/submarine.png',
 
 class Ship:
 	def __init__(self, board, size=4):
+		self.name = None
 		self.size = size
 		self.position = list()
 		self.board = board
 		self.direction = None
 		self.user_position = None
+		self.forbidden_position = list()
 
 	def choose_starting_square(self):
-		x, y = random.randrange(self.board.size), random.randrange(self.board.size)
+		legal_position = False
+		x, y = None, None
+		while not legal_position:
+			x, y = random.randrange(self.board.size), random.randrange(self.board.size)
+			if (x, y) not in self.forbidden_position:
+				legal_position = True
 		return x, y
 
-	def disposition_horizontally(self, board):
-		ship_placed = False
-		while not ship_placed:
-			self.position = list()
-			cpt = 0
-			x, y = self.choose_starting_square()
-			while cpt + y < self.board.size and self.are_nearby_square_empty(x, y + cpt) and cpt < self.size:
-				self.position.append((x, y + cpt))
-				cpt = cpt + 1
-			if cpt == self.size:
-				ship_placed = True
-		for x in self.position:
-			self.board.array_occupied[x[0]][x[1]] = True
+	def disposition_horizontally(self):
+		# t0 = time.time()
+		# if time.time() - t0 > 2000:
+		# 	print('DEAD END REACHED')
+		# 	sys.exit(1)
 
-	def disposition_vertically(self, board):
-		ship_placed = False
-		while not ship_placed:
-			self.position = list()
-			cpt = 0
-			x, y = self.choose_starting_square()
-			while cpt + x < self.board.size and self.are_nearby_square_empty(x + cpt, y) and cpt < self.size:
-				self.position.append((x + cpt, y))
-				cpt = cpt + 1
-			if cpt == self.size:
-				ship_placed = True
-		for x in self.position:
-			self.board.array_occupied[x[0]][x[1]] = True
+		self.position = list()
+		cpt = 0
+		x, y = self.choose_starting_square()
+		while cpt + y < self.board.size and not self.board.array_occupied[x][y + cpt] and cpt < self.size:
+			self.position.append((x, y + cpt))
+			cpt = cpt + 1
+		if cpt == self.size:
+			ship_placed = True
+			return True
+		return False
+
+	def disposition_vertically(self):
+		# t0 = time.time()
+		# if time.time() - t0 > 2000:
+		# 	print('DEAD END REACHED')
+		# 	sys.exit(1)
+
+		self.position = list()
+		cpt = 0
+		x, y = self.choose_starting_square()
+		while cpt + x < self.board.size and not self.board.array_occupied[x + cpt][y] and cpt < self.size:
+			self.position.append((x + cpt, y))
+			cpt = cpt + 1
+		if cpt == self.size:
+			return True
+		return False
 
 	def randomly_position_a_ship(self):
-		# CHoose randomly a value between 0 and 1 to choose whether to place the boat vertically or horizontally
-		position_number = random.randrange(2)
-		if position_number == 0:
-			self.direction = 'horizontally'
-			self.disposition_horizontally(self.board)
-		else:
-			self.direction = 'vertically'
-			self.disposition_vertically(self.board)
+		ship_placed = False
+		# Choose randomly a value between 0 and 1 to choose whether to place the boat vertically or horizontally
+		while len(
+				self.position) < self.size and not ship_placed:  # and self.size < self.board.count_number_of_empty_square() - len(self.forbidden_position):
+			position_number = random.randrange(2)
+			if position_number == 0:
+				self.direction = 'horizontally'
+				ship_placed = self.disposition_horizontally()
+			else:
+				self.direction = 'vertically'
+				ship_placed = self.disposition_vertically()
+		self.board.occupy_area(self.position)
 		self.user_position = [(x[0] + 1, x[1] + 1) for x in self.position]
 
-	def are_nearby_square_empty(self, position_x, position_y):
-		# It's necessary to check what square we're going to inspect otherwise it can raise an IndexError
-		square_to_inspect_x, square_to_inspect_y = [0,], [0,]
-		if position_x > 0: square_to_inspect_x.append(-1)
-		if position_y > 0: square_to_inspect_y.append(-1)
-		if position_x < self.board.size - 1: square_to_inspect_x.append(1)
-		if position_y < self.board.size - 1: square_to_inspect_y.append(1)
-		for x_diff in square_to_inspect_x:
-			for y_diff in square_to_inspect_y:
-				try:
-					if self.board.array_occupied[position_x + x_diff][position_y + y_diff]:
-						return False
-				except IndexError as e:
-					print('AN ERROR HAS OCCURED')
-		return True
+	def remove_ship(self):
+		self.board.occupy_area(self.position, occupy_squares=-1)
+		self.direction = None
+		self.position = list()
+		self.user_position = None
 
 	def draw_image(self, canvas):
 		img_to_open = size_to_ship[self.size]
 		battleship_img = Image.open(img_to_open)
 		newsize = (60 * self.size, 60)
 		battleship_img = battleship_img.resize(newsize)
-		y_value = self.position[0][1]
+		try:
+			y_value = self.position[0][1]
+		except IndexError as e:
+			print(e)
 		if self.size > 1 and self.direction == 'horizontally':
 			battleship_img = battleship_img.transpose(Image.ROTATE_90)
 			y_value = self.position[-1][1]
 		photo = ImageTk.PhotoImage(battleship_img)
-		canvas.create_image(30 + self.position[0][0] * 60, 450 - y_value * 60, image=photo, anchor=NW)
+		canvas.create_image(30 + self.position[0][0] * 60, (60 * self.board.size - 30) - y_value * 60, image=photo,
+		                    anchor=NW)
 		label = Label(image=photo)
 		label.image = photo  # keep a reference!

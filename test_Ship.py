@@ -17,58 +17,35 @@ class test_Board(unittest.TestCase):
 		assert len(starting_square) == 2
 		assert all([True for x in starting_square if 0 < x < 8])
 
-	def test_disposition_horizontally(self):
-		b_test = Board.Board(8)
-		ship_test.disposition_horizontally(b_test)
-		assert len(ship_test.position) == 3
-		# Check if the board are all along the same row
-		assert len(set([x[0] for x in ship_test.position])) == 1
-		# Check if the square are contiguous
-		assert ([x[1] for x in ship_test.position] == list(
-			range(ship_test.position[0][1], ship_test.position[0][1] + ship_test.size)))
-
-	def test_disposition_vertically(self):
+	def test_randomly_position_a_ship(self):
 		b_test = Board.Board(4)
-		ship_test.disposition_vertically(b_test)
+		ship_test.randomly_position_a_ship()
 		assert len(ship_test.position) == 3
 		# Check if the board are all along the same column
-		assert len(set([x[1] for x in ship_test.position])) == 1
+		assert len(set([x[1] for x in ship_test.position])) == 1 or len(set([x[0] for x in ship_test.position])) == 1
 		# Check if the square are contiguous
 		assert ([x[0] for x in ship_test.position] == list(
-			range(ship_test.position[0][0], ship_test.position[0][0] + ship_test.size)))
-
-	def test_are_nearby_square_empty(self):
-		position = (1, 1)
-		b_test = Board.Board(size=3)
-		ship_test_ = Ship.Ship(b_test)
-		assert ship_test_.are_nearby_square_empty(*position)
-		b_test.array_occupied[0][2] = True
-											# False False True
-											# False False False
-											# False False False
-		assert not ship_test_.are_nearby_square_empty(*position)
-		b_test.array_occupied = numpy.zeros((b_test.size, b_test.size), dtype=bool)
-		b_test.array_occupied[0][1] = True
-											# False True False
-											# False False False
-											# False False False
-		assert not ship_test_.are_nearby_square_empty(*position)
-		b_test.array_occupied = numpy.zeros((b_test.size, b_test.size), dtype=bool)
-		b_test.array_occupied[1][1] = True
-											# False False False
-											# False True False
-											# False False False
-		assert not ship_test_.are_nearby_square_empty(*position)
+			range(ship_test.position[0][0], ship_test.position[0][0] + ship_test.size))) or (
+				       [x[1] for x in ship_test.position] == list(
+			       range(ship_test.position[0][1], ship_test.position[0][1] + ship_test.size)))
 
 
-
+	def test_remove_ship(self):
+		b_test = Board.Board(8)
+		test_ship = Ship.Ship(b_test, 3)
+		test_ship.randomly_position_a_ship()
+		test_ship.remove_ship()
+		assert b_test.count_number_of_empty_square() == b_test.size * b_test.size
+		assert not test_ship.position
+		assert not test_ship.user_position
+		assert not test_ship.direction
 
 	def test_position_multiple_ships(self):
-		b_test = Board.Board(8)
+		b_test = Board.Board(20)
 		size_ship_to_place = (4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
 		for x in size_ship_to_place:
 			ship = Ship.Ship(b_test, x)
 			ship.randomly_position_a_ship()
-		# Check if the number of square occupied on the board is equal to the sum of the ships' size
-		# i.e check if all the ships have been placed
-		assert list(b_test.array_occupied.flatten()).count(True) == sum(size_ship_to_place)
+	# Check if the number of square occupied on the board is equal to the sum of the ships' size
+	# i.e check if all the ships have been placed
+	# assert b_test.count_number_of_occupied_square() == sum(size_ship_to_place)
