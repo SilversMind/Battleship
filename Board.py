@@ -12,20 +12,20 @@ class Board(Frame):
 		self.size = size
 		self.array_occupied = numpy.zeros((size, size), dtype=int)
 		self.canvas = None
-		self.initUI()
+	# 	self.initUI()
+	#
+	# def initUI(self):
+	# 	self.master.title("Battleship")
+	# 	self.pack(fill=BOTH, expand=1)
+	#
+	# 	self.canvas = Canvas(self)
+	# 	self.draw_board()
+	# 	self.canvas.pack(fill=BOTH, expand=1)
 
-	def initUI(self):
-		self.master.title("Battleship")
-		self.pack(fill=BOTH, expand=1)
-
-		self.canvas = Canvas(self)
-		self.draw_board()
-		self.canvas.pack(fill=BOTH, expand=1)
-
-	def draw_board(self):
-		for x in range(self.size):
-			for y in range(self.size):
-				self.canvas.create_rectangle(x * 60 + 30, y * 60 + 30, x * 60 + 90, y * 60 + 90)
+	# def draw_board(self):
+	# 	for x in range(self.size):
+	# 		for y in range(self.size):
+	# 			self.canvas.create_rectangle(x * 60 + 30, y * 60 + 30, x * 60 + 90, y * 60 + 90)
 
 	def count_number_of_empty_square(self):
 		return self.array_occupied.size - numpy.count_nonzero(self.array_occupied)
