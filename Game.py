@@ -5,6 +5,8 @@
 import Ship
 import Board
 import queue
+import time
+import sys
 
 class Game:
 	def __init__(self, board, ships):
@@ -12,6 +14,7 @@ class Game:
 		self.ships = list(reversed(ships))
 		self.placed = queue.LifoQueue(maxsize=len(self.ships))
 		self.to_place = queue.LifoQueue(maxsize=len(self.ships))
+		self.t0 = time.time()
 		for ship in ships:
 			self.to_place.put(ship)
 
@@ -33,6 +36,9 @@ class Game:
 
 	def main(self):
 		while not self.placed.full():
+			if time.time() - self.t0 > 6:
+				print('No solution found before timeout')
+				sys.exit(-1)
 			current_ship = self.to_place.get()
 			self.find_ship_location(current_ship)
 

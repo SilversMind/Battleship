@@ -37,17 +37,19 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
     img4 = img.subsample(4, 2)
 
     # Set default value
-    v_escort, v_destroyer, v_torpedo, v_submarine = StringVar(), StringVar(), StringVar(), StringVar()
+    v_escort, v_destroyer, v_torpedo, v_submarine, v_boardsize = StringVar(), StringVar(), StringVar(), StringVar(), StringVar()
     if default_ship_value:
         v_escort.set(str(default_ship_value[0]))
         v_destroyer.set(str(default_ship_value[1]))
         v_torpedo.set(str(default_ship_value[2]))
         v_submarine.set(str(default_ship_value[3]))
+        v_boardsize.set(str(default_ship_value[4]))
     else:
-        v_escort.set("0")
-        v_destroyer.set("0")
-        v_torpedo.set("0")
-        v_submarine.set("0")
+        v_escort.set("1")
+        v_destroyer.set("2")
+        v_torpedo.set("3")
+        v_submarine.set("4")
+        v_boardsize.set("8")
 
 
     # setting image with the help of label
@@ -74,14 +76,9 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
     l1 = Label(master, text="Board size")
     l1.grid(row=3, column=0)
 
-    v_boardsize = StringVar()
-    v_boardsize.set("8")
-
     sb_boardsize = Spinbox(master, from_=0, to=10, textvariable=v_boardsize)
     sb_boardsize.grid(row=3, column=2, padx=5, pady=20)
 
-    if ships_size:
-        print(ships_size)
 
     def quit(master):
         master.destroy()
@@ -92,7 +89,7 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
         number_destroyer = sb_destroyer.get()
         number_torpedo = sb_torpedo.get()
         number_submarine = sb_submarine.get()
-        default_ship_value = (number_escort, number_destroyer, number_torpedo, number_submarine)
+        default_ship_value = (number_escort, number_destroyer, number_torpedo, number_submarine, size_)
 
         ship_list = list()
         for cpt, number in enumerate((number_submarine, number_torpedo, number_destroyer, number_escort)):
@@ -119,23 +116,6 @@ def init_interface(size=8, ships_size=None, game=None, default_ship_value = None
             ship.draw_image(c)
 
     mainloop()
-
-
-
-def main():
-    root = Tk()
-    b_test = Board.Board(5)
-    windows_size = (b_test.size + 1) * 60
-    root.geometry("{0}x{0}".format(str(windows_size)))
-    ships_size = ()
-    ships = [Ship.Ship(b_test, x) for x in ships_size]
-    game = Game.Game(b_test, ships)
-    game.main()
-    while not game.placed.empty():
-        ship = game.placed.get()
-        ship.draw_image(b_test.canvas)
-
-    root.mainloop()
 
 
 if __name__ == '__main__':
